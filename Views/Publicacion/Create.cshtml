@@ -1,0 +1,129 @@
+﻿@model MercadoVentasTP.Models.Publicacion
+
+@{
+    ViewBag.Title = "Nueva publicación";
+    var categorias = ViewBag.Categorias as List<SelectListItem>;
+    var productos = ViewBag.Productos as List<SelectListItem>;
+}
+
+<div class="jumbotron">
+    <h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+    <p class="lead text-right">@ViewBag.Subtitulo</p>
+    <hr class="my-4">
+    <p class="text-right">@ViewBag.Parrafo</p>
+</div>
+
+<div class="container-fluid">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            <div class="form-group">
+                <fieldset>
+                    @Html.LabelFor(model => model.Titulo, htmlAttributes: new { @class = "control-label", @for = "titulo" })
+                    @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control", @id = "titulo", @type = "text", @placeholder = "Escribí acá un título sobre tu producto" } })
+                    @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger d-block mt-2" })
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label", @for = "descripcion" })
+                    @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "descripcion", @type = "text", @rows = "7", @placeholder = "Escribí acá alguna descripción sobre tu producto" })
+                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger d-block mt-2" })
+                </fieldset>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.Precio, htmlAttributes: new { @class = "control-label", @for = "precio" })
+                        @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control", @id = "precio" } })
+                        @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger d-block mt-2" })
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.PrecioMin, htmlAttributes: new { @class = "control-label", @for = "precioMin" })
+                        @Html.EditorFor(model => model.PrecioMin, new { htmlAttributes = new { @class = "form-control", @id = "precioMin" } })
+                        @Html.ValidationMessageFor(model => model.PrecioMin, "", new { @class = "text-danger d-block mt-2" })
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.PrecioMax, htmlAttributes: new { @class = "control-label", @for = "precioMax" })
+                        @Html.EditorFor(model => model.PrecioMax, new { htmlAttributes = new { @class = "form-control", @id = "precioMax" } })
+                        @Html.ValidationMessageFor(model => model.PrecioMax, "", new { @class = "text-danger d-block mt-2" })
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group mt-3">
+                        <fieldset>
+                            @Html.LabelFor(model => model.Stock, htmlAttributes: new { @class = "control-label", @for = "stock" })
+                            @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-control", @id = "stock", @type = "number" } })
+                            @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger d-block mt-2" })
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group mt-3">
+                        <fieldset>
+                            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label", @for = "estado" })
+                            @Html.DropDownList("Estado", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Activa", Value = "Activa" },
+                                new SelectListItem { Text = "Sin stock", Value = "Sin stock" },
+                                new SelectListItem { Text = "Inactiva",  Value = "Inactiva" }
+                            }, new { @class = "form-control", @id = "estado", @name = "estado" })
+                            @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger d-block mt-2" })
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label mt-3">Categorias</label>
+                        @Html.DropDownListFor(c => c.IdCategoria, categorias, new { @class = "selectpicker form-control categoriaDropdown", @id = "categorias" })
+                        @Html.ValidationMessageFor(model => model.IdCategoria, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label mt-3">Productos</label>
+                        @Html.DropDownListFor(p => p.IdProducto, productos, new { @class = "form-control", id = "productos" })
+                        @Html.ValidationMessageFor(model => model.IdProducto, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <button class="btn btn-success btn-block" type="submit">
+                <span class="glyphicon glyphicon-ok glyphicon-ld"></span>
+            </button>
+        </div>
+    }
+</div>
+
+@section Custom {
+
+    <script type="text/javascript">
+
+        $("#categorias").attr("data-live-search", true);
+
+        $("#categorias").on("change", function () {
+            var idCategoria = $(this).val();
+            $("#productos").empty();
+            $.getJSON("@Url.Action("ObtenerProductos", "Publicacion")", { idCategoria: idCategoria }, function (data) {
+                $.each(data, function () {
+                    $("#productos").append($("<option>").val(this.Value).text(this.Text));
+                });     
+            });
+        });
+
+    </script>
+
+}

@@ -1,0 +1,62 @@
+﻿@model MercadoVentasTP.Models.Paginador
+
+@{
+    var cantidadPaginas = (int)Math.Ceiling((double)Model.TotalRegistros / Model.RegistrosPorPagina);
+    int Inicial = 1;
+    var radio = 2;
+    var cantidadMaximaDePaginas = radio * 2 + 1;
+    int Final = (cantidadPaginas > cantidadMaximaDePaginas) ? cantidadMaximaDePaginas : cantidadPaginas;
+    if (Model.PaginaActual > radio + 1)
+    {
+        Inicial = Model.PaginaActual - radio;
+        if (cantidadPaginas > Model.PaginaActual + radio)
+        {
+            Final = Model.PaginaActual + radio;
+        }
+        else
+        {
+            Final = cantidadPaginas;
+        }
+    }
+}
+
+<ul class="pagination justify-content-center">
+    @if (Model.PaginaActual == 1) //Estoy en la primer pagina
+    {
+        Model.Filtro["pagina"] = 1;
+        <li class="page-item disabled">@Html.ActionLink("Anterior", null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+    }
+    else
+    {
+        Model.Filtro["pagina"] = Model.PaginaActual - 1;
+        <li class="page-item">@Html.ActionLink("Anterior", null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+    }
+
+    @for (int i = Inicial; i <= Final; i++) //Escribo los valores numericos de las paginas
+    {
+        Model.Filtro["pagina"] = i;
+        if (i == Model.PaginaActual)
+        {
+            <li class="page-item active">@Html.ActionLink(i.ToString(), null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+        }
+        else
+        {
+            <li class="page-item">@Html.ActionLink(i.ToString(), null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+        }
+    }
+
+    @if (Model.PaginaActual == cantidadPaginas) //Estoy en la ultima pagina
+    {
+        Model.Filtro["pagina"] = cantidadPaginas;
+        <li class="page-item disabled">@Html.ActionLink("Siguiente", null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+    }
+    else
+    {
+        Model.Filtro["pagina"] = Model.PaginaActual + 1;
+        <li class="page-item">@Html.ActionLink("Siguiente", null, new { pagina = Model.Filtro["pagina"] }, htmlAttributes: new { @class = "page-link" })</li>
+    }
+</ul>
+
+@{
+    Model.PaginaActual = (int)Model.Filtro["pagina"]; //Guardo la pagina actual
+}

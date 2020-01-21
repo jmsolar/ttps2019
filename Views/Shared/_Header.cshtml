@@ -1,0 +1,184 @@
+﻿@using Microsoft.AspNet.Identity
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="navbar-toggler-icon" aria-hidden="true"></span>
+    </button>
+    <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+        <span class="glyphicon glyphicon-home glyphicon-xl px-3" aria-hidden="true"></span>
+    </a>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="navbar-nav mr-auto">
+            @if (!Request.IsAuthenticated)
+            {
+                <li class="nav-item active mr-2">
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-outline-success mb-2" title="Iniciar sesión">
+                        INICIAR SESION
+                    </a>
+                </li>
+            }
+            <li class="nav-item mr-2 d-none d-lg-block">
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post, htmlAttributes: new { @class = "form-inline" }))
+                {
+                    <input class="form-control mr-md-2" type="text" placeholder="buscar producto" name="busqueda">
+                    <button class="btn btn-primary my-2 my-md-0" type="submit"><span class="glyphicon glyphicon-search glyphicon-md" aria-hidden="true"></span></button>
+                    <button class="btn btn-primary ml-2" type="button" data-toggle="collapse" data-target="#filtros" aria-expanded="false" aria-controls="filtros"><span class="glyphicon glyphicon-tasks glyphicon-md" aria-hidden="true"></span></button>
+                }
+            </li>
+            @{
+                if (Request.IsAuthenticated)
+                {
+                    <li class="nav-item border-0 mr-0 px-3">
+                        @if (ViewBag.saldo != null)
+                        {
+                            @* Se muestra el saldo actual que posee el usuario logueado en la billetera virtual *@
+                            <div>
+                                <h5 class="text-info text-capitalize d-inline-flex">Mi saldo: </h5><text class="text-dark"> $@ViewBag.saldo</text>
+                            </div>
+                        }
+                        <div>
+                            <h5 class="text-warning text-capitalize d-inline-flex">Vista actual:  </h5><text id="textoPerfil2" class="text-dark text-capitalize"> </text>
+                        </div>
+                    </li>
+                    <li id="ulToggle" class="nav-item mr-0 px-4" hidden>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="cambiarPerfil();">
+                            <label id="textoPerfil" class="custom-control-label" for="customSwitch1">Vista comprador</label>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+        @{
+            if (Request.IsAuthenticated)
+            {
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                                <a href="#" class="btn btn-secondary text-dark" role="button" id="dropdownMenuCarrito" data-toggle="dropdown"><span class="glyphicon glyphicon-user glyphicon-lg mx-2" aria-hidden="true"></span>Mi cuenta<span style="font-size:7px"> ▼</span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="@Url.Action("Details", "Account")">
+                                <span class="glyphicon glyphicon-eye-open glyphicon-md px-2 mr-3" aria-hidden="true"></span>Mi perfil
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Carrito")">
+                                <span class="glyphicon glyphicon-shopping-cart px-2 mr-1" aria-hidden="true"><sub class="" style="font-size:8px">(@if (@Session["itemsCarrito"] != null)
+                                {@Session["itemsCarrito"].ToString()})</sub></span>Mi carrito
+                            </a>
+                            <a class="dropdown-item" onclick="return confirm('¿Esta seguro que quiere vaciar el carrito?');" href="@Url.Action("Vaciar", "Carrito")">
+                                <span class="glyphicon glyphicon-trash px-2 mr-3" aria-hidden="true"></span>Vaciar carrito
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Publicacion")">
+                                <span class="glyphicon glyphicon-list-alt glyphicon-md px-2 mr-3" aria-hidden="true"></span>Mis publicaciones
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Create", "Publicacion")">
+                                <span class="glyphicon glyphicon-pencil glyphicon-md px-2 mr-3" aria-hidden="true"></span>Realizar publicación
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Manage")">
+                                <span class="glyphicon glyphicon-cog glyphicon-md px-2 mr-3" aria-hidden="true"></span>Configurar publicaciones
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Compra")">
+                                <span class="glyphicon glyphicon-shopping-cart glyphicon-md px-2 mr-3" aria-hidden="true"></span>Mis compras
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Calificacion")">
+                                <span class="glyphicon glyphicon-thumbs-up glyphicon-md px-2 mr-3" aria-hidden="true"></span>Calificar compra
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Create", "Movimiento")">
+                                <span class="glyphicon glyphicon-usd glyphicon-md px-2 mr-3" aria-hidden="true"></span>Gestionar billetera
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Movimiento")">
+                                <span class="glyphicon glyphicon-tasks glyphicon-md px-2 mr-3" aria-hidden="true"></span>Mis movimientos
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Grafico", "Publicacion")">
+                                <span class="glyphicon glyphicon-stats glyphicon-md px-2 mr-3" aria-hidden="true"></span>Estadística de ventas
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                                    <span class="glyphicon glyphicon-log-out glyphicon-md px-2 mr-3" aria-hidden="true"></span> Cerrar sesión
+                                </a>
+                            }
+                        </div>
+                    </li>
+                </ul>
+            }
+        }
+    </div>
+</nav>
+<nav>
+    <ul class="navbar-nav d-md-block d-lg-none mt-3">
+        <li>
+            <form class="form-inline mx-3 mb-3">
+                <input class="form-control mr-sm-2 w-50" type="text" placeholder="buscar producto">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit"><span class="glyphicon glyphicon-search glyphicon-md" aria-hidden="true"></span></button>
+                <button class="btn btn-primary mx-2" type="button" data-toggle="collapse" data-target="#filtros" aria-expanded="false" aria-controls="filtros"><span class="glyphicon glyphicon-tasks glyphicon-md" aria-hidden="true"></span></button>
+            </form>
+        </li>
+    </ul>
+</nav>
+<div class="col-md-12 px-0">
+    <div class="row">
+        <div class="col-12">
+            <div class="collapse" id="filtros">
+                <div class="pb-2 pt-2">
+                    <div class="mb-3 text-center">
+                        <div class="card-body ">
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-6">
+                                        <div class="text-left text-transform-initial d-block">Seleccionar categoria</div>
+                                        <select class="custom-select d-block mt-2">
+                                            <option selected="">Otros</option>
+                                            <option value="1">Electrónica</option>
+                                            <option value="2">Indumentaria</option>
+                                            <option value="3">Vehículos</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 col-lg-6">
+                                        <div class="text-left text-transform-initial d-block">Seleccionar subcategoria</div>
+                                        <select class="custom-select d-block mt-2" disabled>
+                                            <option selected=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-left text-transform-initial mb-1 d-block">Rango de precios</label>
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-6">
+                                        <div class="control-label text-right d-inline-block">mayor a</div>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" aria-hidden="true">$</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" aria-hidden="true">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-6">
+                                        <div class="control-label text-right d-inline-block">menor a</div>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" aria-hidden="true">$</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" aria-hidden="true">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success btn-block mt-4"><span class="glyphicon glyphicon-ok glyphicon-lg" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

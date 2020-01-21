@@ -1,0 +1,109 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.text-transform-initial, .titulo-publicacion-relacionada {
+    text-transform: initial;
+}
+
+.sinCuenta, .titulo-publicacion-relacionada {
+    font-size: 14px !important;
+}
+
+    .sinCuenta:hover {
+        background-color: #FFF !important;
+        border-color: #FFF !important;
+    }
+
+    .sinCuenta:focus {
+        box-shadow: none !important;
+    }
+
+.productoHover:hover {
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-color: var(--success) !important;
+    cursor: pointer !important;
+}
+
+@media (max-width: 576px) {
+    #listaCarrito, #listaUsuario,#dropdownMenuCarrito {
+        padding-left: 0px !important;
+    }
+}
+
+.centrarPaginador {
+    display: grid !important;
+}
+
+.page-item.active .page-link {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.precio-publicacion-relacionada, .resultadoBusqueda {
+    font-size: 20px !important;
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-indicators .active {
+    background-color: var(--success) !important;
+}
+
+.glyphicon-star, .glyphicon-star-empty {
+    color: var(--success) !important;
+}
+
+.custom-radio .custom-control-label::before {
+    background-color: black !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: var(--success) !important;
+}
+
+input[type=checkbox]:checked + label {
+    color: black;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.closeLogin {
+    font-size:40px!important
+}
+
+.custom-image {
+    max-height: 100%!important;
+    max-width: 100%!important;
+}
+
+.rounded-bottom-0 {
+    border-bottom-left-radius: initial !important;
+    border-bottom-right-radius: initial !important;
+}
+
+.categoriaDropdown > .dropdown-toggle {
+    background-color: #f7f7f9 !important;
+    background-clip: padding-box !important;
+    border: 0px solid #ced4da !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}

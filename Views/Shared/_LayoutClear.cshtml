@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://img.icons8.com/clouds/100/000000/online-shop-shopping-bag.png" rel="icon" />
+    @Styles.Render("~/bundles/Content/BootstrapSelect")
+    @Styles.Render("~/bundles/Content/Bootstrap")
+    @Styles.Render("~/bundles/Content/Custom")
+</head>
+<body class="m-0 p-0">
+    @RenderBody()
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryunob")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/btsjquery")
+    @Scripts.Render("~/bundles/bootstrapselect")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/script")
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+    @RenderSection("custom", required: false)
+</body>
+</html>

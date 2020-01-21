@@ -1,0 +1,104 @@
+﻿@model MercadoVentasTP.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Registrar usuario";
+    Layout = "~/Views/Shared/_LayoutClear.cshtml";
+}
+
+<div class="row m-5">
+    <div class="col-12">
+        <section id="regisetrForm">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-11">
+                        <h4>Registrarme</h4>
+                    </div>
+                    <div class="col-1">
+                        <a href="@Url.Action("Index", "Home")" class="close">
+                            <span class="closeLogin" aria-hidden="true">×</span>
+                        </a>
+                    </div>
+                </div>
+                <hr class="mb-5 mt-2" />
+                <div class="row">
+                    <div class="col-2 align-self-start">
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-2 align-self-end">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 align-self-start">
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-2 align-self-end">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 align-self-start">
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.Birthday, new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Birthday)
+                        @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-2 align-self-end">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 align-self-start">
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-4 align-self-center">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger d-block mt-2" })
+                    </div>
+                    <div class="col-2 align-self-end">
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-2 align-self-start"></div>
+                    <div class="col-8 align-self-center">
+                        <input type="submit" value="Registrarme" class="btn btn-outline-success btn-block" />
+                    </div>
+                    <div class="col-2 align-self-end"></div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Birthday").removeClass('text-box single-line');
+            $("#Birthday").addClass('form-control date datepicker');
+        });
+    </script>
+
+});

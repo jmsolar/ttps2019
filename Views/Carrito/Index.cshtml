@@ -1,0 +1,205 @@
+﻿@using MercadoVentasTP.Models
+@model List<PublicacionEnCarrito>
+
+@{
+	float TotalItems = 0;
+}
+
+<div class="jumbotron mb-5">
+	<h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+	<p class="lead text-right">
+		@ViewBag.Subtitulo
+	</p>
+</div>
+@if (TempData["Error"] != null)
+{
+	<div class="alert alert-warning alert-dismissible fade show container text-center" role="alert">
+		<strong class="text-center">@TempData["Error"].ToString()</strong>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+}
+<section class="bs-docs-section">
+	<div class="container-fluid ">
+		@using (Html.BeginForm("Registrar", "Compra", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+		{
+			@Html.AntiForgeryToken()
+			<div class="card border-secondary mt-3 mb-5 shadow ">
+				<div class="card-body">
+					<h4 class="card-title-center text-center mt-3">DETALLE DEL CARRITO</h4>
+				</div>
+				<table class="table table-hover table-bordered justify-content-center" id="tablaCarrito">
+					<thead class="thead-dark">
+						<tr>
+							@*<th class="text-center h4">Foto</th>*@
+							<th class="text-center h4 col-5">Publicación</th>
+							<th class="text-center h4 col-2">Cantidad</th>
+							<th class="text-center h4 col-3">Precio</th>
+							<th class="text-center h4 col-2">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							if (Model != null)
+							{
+								if (Model.Any())
+								{
+									foreach (var itemCarrito in Model)
+									{
+												<tr>
+
+
+													@*<td class="text-center col-2">
+														<img src="" class="img-thumbnail" alt=""
+															 style="width: 160px;height: 160px">
+													</td>*@
+
+
+													<td class="text-center h5 text-uppercase col-5">
+														<a href="@Url.Action("Details", "Publicacion", new { Id = itemCarrito.publicacion.Id })" class="">
+															@itemCarrito.publicacion.Titulo
+														</a>
+													</td>
+
+
+													@{var idStock = "idStock_" + itemCarrito.carrito.Id;}
+													@{var idLabelCantidad = "labelCantidad_" + itemCarrito.carrito.Id;}
+													<td class="text-center h5 col-2">
+														@Html.EditorFor(modelItem => itemCarrito.carrito.Cantidad, new { htmlAttributes = new { @class = "form-control text-center mb-5", @id = "inputId_" + itemCarrito.carrito.Id, @min = 1, @type = "number", @onchange = "actualizarValores("+ itemCarrito.publicacion.PrecioActual + "," + itemCarrito.carrito.Id + ") ; " } })
+														@Html.ValidationMessageFor(modelItem => itemCarrito.carrito.Cantidad, "", new { @class = "text-danger d-block mt-2" })
+														<span id="@idStock" hidden>@itemCarrito.publicacion.Stock</span>
+														<span class="text-danger" id="@idLabelCantidad"></span>
+													</td>
+
+
+													@{var idPrecioUnitario = "idPrecioUnitario_" + itemCarrito.carrito.Id;}
+													@{var idInput = "labelPrecio_" + itemCarrito.carrito.Id;}
+													@{var precioUnitario = itemCarrito.publicacion.PrecioActual; }
+													@{var total = itemCarrito.publicacion.PrecioActual * itemCarrito.carrito.Cantidad; }
+													<td class="text-center h5 col-3" id="tdPrecio">
+														<p id="@idPrecioUnitario">
+															@if (@itemCarrito.carrito.Cantidad > 1)
+															{@String.Concat("Precio Unitario: $ " + precioUnitario)							}
+														</p>
+														<input type="hidden" name="Monto" id="Monto" value="">
+														<span class="h4">$ <span id="@idInput" class="text-center">@total</span></span>
+													</td>
+
+
+													@{TotalItems = TotalItems + (itemCarrito.publicacion.PrecioActual * itemCarrito.carrito.Cantidad); }
+													<td class="text-center h5 col-2">
+														@Html.ActionLink(" ", "Delete", "Carrito", new { Id = itemCarrito.carrito.Id }, new { @onclick = "return confirm('¿Esta seguro que quiere eliminar este producto del carrito?');", @class = "btn btn-success btn-block glyphicon glyphicon-trash" })
+													</td>
+
+												</tr>
+
+									}
+									<tr>
+										<td class="text-uppercase text-right h5" colspan="5">
+											<span class="mr-5 h4">Total: $ <span id="precioTotal">@TotalItems</span></span>
+											<button type="submit" class="btn btn-success glyphicon glyphicon-ok ml-5 mr-1 px-5" id="buttonCompra"></button>
+										</td>
+									</tr>
+								}
+								else
+								{
+									<tr>
+										<td class="text-center " colspan="5">
+											Todavía no has agregado productos al carrito
+										</td>
+									</tr>
+								}
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+
+
+	</div>
+</section>
+
+@section Custom {
+	<script type="text/javascript">
+
+		function actualizarValores(precioUnitario, idItem) {
+			let idInputCantidad = 'inputId_' + idItem;
+			var inputCantidad = document.getElementById(idInputCantidad);
+			inputCantidad.defaultValue = inputCantidad.value;
+
+			let labelPrecio = 'labelPrecio_' + idItem;
+			var precioActualElement = document.getElementById(labelPrecio);
+			var precioAnterior = parseInt(precioActualElement.textContent);
+			var precioTotal = document.getElementById('precioTotal');
+
+			let idPrecioUnitario = 'idPrecioUnitario_' + idItem;
+			var precioUnitarioElement = document.getElementById(idPrecioUnitario);
+			let idLabelCantidad = 'labelCantidad_' + idItem;
+			var labelCantidad = document.getElementById(idLabelCantidad);
+			let idStock = 'idStock_' + idItem;
+			var stock = document.getElementById(idStock).textContent;
+
+			if (parseFloat(inputCantidad.value) > 0 && Number.isInteger(parseFloat(inputCantidad.value))) {
+				labelCantidad.textContent = '';
+				precioActualElement.textContent = inputCantidad.value * parseInt(precioUnitario);
+				precioUnitarioElement.textContent = "Precio Unitario: $ " + precioUnitario.toString();
+				if (inputCantidad.value == 1) {
+					precioUnitarioElement.textContent = '';
+				}				
+				if (parseInt(inputCantidad.value) > parseInt(stock) ) {
+					labelCantidad.textContent = 'Stock Insuficiente: Seleccione una cantidad menor o igual a ' + stock;
+				}
+			}
+			else {
+				precioActualElement.textContent = '0';
+				precioUnitarioElement.textContent = '';
+				labelCantidad.textContent = 'Ingrese un valor entero distinto de 0';
+			}
+			precioTotal.textContent = parseInt(precioTotal.textContent) - precioAnterior + parseInt(precioActualElement.textContent);
+			let Monto = document.getElementById('Monto');
+			Monto.value = parseInt(precioTotal.textContent);
+			if ((parseInt(precioTotal.textContent) <= 0) || (parseInt(inputCantidad.value) > parseInt(stock))) {
+				let buttonCompra = document.getElementById('buttonCompra');
+				buttonCompra.disabled = true;
+				buttonCompra.title = "No se puede realizar la compra corrija los campos erroneos";
+			} else {
+				let buttonCompra = document.getElementById('buttonCompra');
+				buttonCompra.disabled = false;
+				buttonCompra.title = "";
+			}
+		}
+
+
+			//function valoresIniciales() {
+			//	var table = document.getElementById("tablaCarrito");
+			//	var precioTotal = document.getElementById('precioTotal');
+			//	precioTotal.textContent = '0';
+			//	for (let i = 1; row = table.rows[i]; i++) {
+			//		let cantidad = row.cells[2].firstElementChild.value;
+			//		let precio = row.cells[3].lastElementChild.innerText;
+			//		let total = cantidad * precio;
+			//		precioTotal.textContent = parseInt(precioTotal.textContent) + parseInt(total);
+
+
+			//		let precioUnitario = row.cells[2].lastElementChild;
+			//		if (cantidad > 1) {
+			//			precioUnitario.textContent = "Precio Unitario: $ " + precio.toString();
+			//		}
+			//		else {
+			//			precioUnitario.textContent = '';
+			//		}
+			//		let Monto = document.getElementById('Monto');
+			//		Monto.value = parseInt(precioTotal.textContent);
+			//	}
+
+			//}
+
+			//window.onload = function () {
+
+			//	valoresIniciales();
+
+			//}
+	</script>
+}

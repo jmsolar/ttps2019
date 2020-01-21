@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MercadoVentasTP.Models.VentaPublicacion>
+
+
+@using MercadoVentasTP.Models
+
+@{
+
+    ViewBag.Title = "Publicaciones de una compra | MercadoVentas";
+    ViewBag.Titulo = "Publicaciones!";
+    ViewBag.Subtitulo = "Desde acá vas a poder calificar cada publicacion de una compra.";
+    ViewBag.Informacion = "Con solo dos clicks podés editar tus preferencias!";
+}
+
+
+<div class="jumbotron mb-5">
+    <h1 class="display-4 text-right">Publicaciones de una venta</h1>
+    <p class="lead text-right">
+        Desde acá vas a poder visualizar las publicaciones de una venta        
+</div>
+<div class="container">
+    <div class="card border-secondary mt-3 mb-5 shadow">
+        <div class="mt-4">
+            <h4 class="text-center mt-3">Publicaciones incluidas en la venta <!--de la compra--> @*  #@Html.DisplayFor(model => model.First().IdCompra) *@ </h4>
+        </div>
+        <div id="myTabContent" class="tab-content mt-4">
+            <div class="tab-pane fade active show">
+                @if (!Model.Any())
+                {
+                    <table class="mr-2 table table-hover table-bordered">
+                        <thead class="thead-dark mr-3">
+                            <tr>
+                                <th scope="col" class="text-center">Publicación</th>
+                                <th scope="col" class="text-center">Cantidad</th>                     
+                                <th scope="col" class="text-center">Monto</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="mb-5 text-center">No existen publicaciones en ésta venta</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <table class="mr-2 table table-hover table-bordered">
+                        <thead class="thead-dark mr-3">
+                            <tr>
+                                <th scope="col" class="text-center">Publicación</th>
+                                <th scope="col" class="text-center">Cantidad</th>                                
+                                <th scope="col" class="text-center">Monto</th>                             
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var model in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => model.NombrePublicacion)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => model.Cantidad)</td>
+                                    @*  SE MUESTRAN TODOS LOS PRODUCTOS DE ESA COMPRA
+                                        <td>@Html.DisplayFor(modelItem => model.publicacion.Titulo)</td>*@                                  
+                                    <td class="text-center">@Html.DisplayFor(modelItem => model.Monto)</td>                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                <!-- PAGINADOR DE LA TABLA-->
+            </div>
+            <div class="container text-center">
+                <button type="button" class="btn btn-success mb-3 text-center  " onclick="location.href='@Url.Action("Index", "Venta")'">
+                    Volver a mis ventas
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+}

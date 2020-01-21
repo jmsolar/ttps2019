@@ -1,0 +1,85 @@
+﻿@model MercadoVentasTP.Models.Calificacion
+
+@{
+    ViewBag.Title = "Calificar compra | MercadoVentas";
+}
+
+<div class="jumbotron mb-5">
+    <h1 class="display-3 text-right">Calificación</h1>
+    <p class="lead text-right">Desde acá vas a poder calificar un producto comprado recientemente</p>
+    <hr class="my-4">
+    <p class="text-right">Podés dejar tu opinión en pocos clicks!</p>
+</div>
+
+<div class="container">
+    <div class="shadow mt-3 pb-2 pt-2">
+        <div class="mb-3 text-center">
+            <div class="card-body">
+                <h4 class="card-title-center text-center mt-3">Calificá el producto</h4>
+                @using (Html.BeginForm("Create", "Calificacion", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="container  ">
+                        <div class="form-group">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <label for="example">Comentario acerca del vendedor y del producto</label>
+                            @Html.TextAreaFor(c => c.Comentario, 5, 5, new { @class = "form-control", id = "quanti"})
+                            @Html.ValidationMessageFor(c => c.Comentario, "", new { @class = "text-danger d-block mt-2" })
+                            @* Seteo el id de Publicación y el Id de compra *@
+                            @Html.TextBoxFor(m => m.IdPublicacion, new { @Value = @Request.QueryString["idPublicacion"], @type = "hidden", @class = "form-control" })
+                            @Html.TextBoxFor(m => m.IdCompra, new { @Value = @Request.QueryString["idCompra"], @type = "hidden", @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleTextarea">Elegí un puntaje acerca de la compra</label>
+                            <div class="form-check card-header mb-2 text-center">
+                                <div class="custom-control mt-3  custom-radio d-inline-flex">
+                                    @Html.RadioButtonFor(c => c.Puntaje, 1, new { @checked = true })
+                                    <label class="ml-2" for="customRadio1">1</label>
+                                </div>
+                                <div class="custom-control custom-radio d-inline-flex mx-2">
+                                    @Html.RadioButtonFor(c => c.Puntaje, 2, new { @class = "mx-1" })
+                                    <label class="ml-2" for="customRadio2">2</label>
+                                </div>
+                                <div class="custom-control custom-radio d-inline-flex mx-2">
+                                    @Html.RadioButtonFor(c => c.Puntaje, 3, new { @class = "mx-1" })
+                                    <label class="ml-2" for="customRadio3">3</label>
+                                </div>
+                                <div class="custom-control custom-radio d-inline-flex mx-2">
+                                    @Html.RadioButtonFor(c => c.Puntaje, 4, new { @class = "mx-1" })
+                                    <label class="ml-2" for="customRadio4">4</label>
+                                </div>
+                                <div class="custom-control custom-radio d-inline-flex mx-2">
+                                    @Html.RadioButtonFor(c => c.Puntaje, 5, new { @class = "mx-1" })
+                                    <label class="ml-2" for="customRadio5">5</label>
+                                </div>
+                                @Html.ValidationMessageFor(c => c.Puntaje, "", new { @class = "text-danger d-block mt-2" })
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success ">
+                                Calificar
+                            </button>
+                            <button type="button" class="btn btn-success"  id="btn_Validar" onclick="location.href='@Url.Action("Index", "Calificacion")'">
+                                Volver a mis compras
+                            </button>
+                        </div>                        
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        function validarInput() {
+            document.getElementById("btn_Validar").disabled = !document.getElementById("quanti").value.length;
+        }
+
+    </script>
+
+}

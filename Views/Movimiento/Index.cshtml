@@ -1,0 +1,110 @@
+﻿@* using MercadoVentasTP.Models *@
+@* model IEnumerable<Movimiento> *@
+@model MercadoVentasTP.Models.MovimientoVM 
+@{
+    ViewBag.Title = "Mis Movimientos | MercadoVentas";
+    ViewBag.Titulo = "GESTIONAR BILLETERA!";
+    ViewBag.Subtitulo = "Desde acá vas a poder visualizar los movimientos de tu billetera virtual.";
+    ViewBag.Informacion = "Podés hacer estas operaciones en solo dos clicks!";
+}
+
+
+<div class="container-fluid px-0">
+    <div class="row">
+        <div class="col-md-12 pr-0">
+            <div class="jumbotron">
+                <h1 class="display-3 text-right">MIS MOVIMIENTOS</h1>
+                <p class="lead text-right">
+                    Desde acá vas a poder visualizar los movimientos de tu billetera virtual.
+                </p>
+                <hr class="my-4">
+                <p class="text-right">Podés hacer estas operaciones en solo dos clicks!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORM GESTIONAR BILLETERA -->
+    <div class="mx-2">
+        <div class="container">
+            @if (TempData["Success"] != null)
+            {
+
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                    <strong class="text-center">@TempData["Success"].ToString()</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            <!-- TABLA MOVIMIENTOS BILLETERA VIRTUAL -->
+        <div class="card border-secondary mt-3 mb-5 shadow ">
+            <div class="card-body">
+                <h4 class="card-title-center text-center mt-3">DETALLE DE MOVIMIENTOS</h4>
+            </div>
+            @if (Model.Movimientos.Count > 0)
+            {
+                <table class="table table-hover table-bordered mb-3">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">FECHA</th>
+                            <th scope="col" class="text-center">TIPO DE OPERACION</th>
+                            <th scope="col" class="text-center">IMPORTE DE OPERACION</th>
+                        </tr>
+                    </thead>
+    
+                    @foreach (var model in Model.Movimientos)
+                    {
+                        <tbody class="text-center">
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => model.Fecha)</td>
+                                <td>@Html.DisplayFor(modelItem => model.Operacion)</td>
+                                <td>$ @Html.DisplayFor(modelItem => model.Monto)</td>
+
+                            </tr>
+
+                        </tbody>
+                    }
+                </table>
+                <div class="my-3 align-center">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <nav aria-label="page navigation">
+                                @{Html.RenderPartial("~/Views/Shared/_Paginador.cshtml", Model);}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header mt-1 text-center">
+                    Sólo se muestran 10 resultados por página
+                </div>
+            } else {
+                <table class="table table-hover table-bordered mb-3">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">FECHA</th>
+                            <th scope="col" class="text-center">TIPO DE OPERACION</th>
+                            <th scope="col" class="text-center">IMPORTE DE OPERACION</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr>
+                            <td colspan="3" class="mb-5">Aún no se registran movimientos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+
+}
+
+
+
+

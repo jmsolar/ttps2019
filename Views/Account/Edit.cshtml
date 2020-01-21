@@ -1,0 +1,73 @@
+﻿@model MercadoVentasTP.Models.PersonalInfoViewModel
+@{
+    ViewBag.Title = "Actualizar datos peronales";
+}
+
+<div class="jumbotron">
+    <h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+    <p class="lead text-right">@ViewBag.Subtitulo</p>
+    <hr class="my-4">
+    <p class="text-right">@ViewBag.Parrafo</p>
+</div>
+
+<div class="container-fluid mb-4">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label", @for = "nombre" })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "nombre", @type = "text" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger d-block my-2" })
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label", @for = "apellido" })
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @id = "apellido", @type = "text" } })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger d-block my-2" })
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.Birthday, htmlAttributes: new { @class = "control-label", @for = "fechaNacimiento" })
+                        @Html.EditorFor(model => model.Birthday, "{0:dd'-'MM'-'yyyy}", new { htmlAttributes = new { @class = "form-control", @id = "fechaNacimiento", @type = "date" } })
+                        @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger d-block my-2" })
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.CoordX, htmlAttributes: new { @class = "control-label", @for = "latitud" })
+                        @Html.EditorFor(model => model.CoordX, new { htmlAttributes = new { @class = "form-control", @id = "latitud", @type = "number" } })
+                        @Html.ValidationMessageFor(model => model.CoordX, "", new { @class = "text-danger d-block my-2" })
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        @Html.LabelFor(model => model.CoordY, htmlAttributes: new { @class = "control-label", @for = "longitud" })
+                        @Html.EditorFor(model => model.CoordY, new { htmlAttributes = new { @class = "form-control", @id = "longitud", @type = "number" } })
+                        @Html.ValidationMessageFor(model => model.CoordY, "", new { @class = "text-danger d-block my-2" })
+                    </fieldset>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-3">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-block btn-primary">
+                        <span class="glyphicon glyphicon-chevron-left glyphicon-lg"></span>
+                    </a>
+                </div>
+                <div class="col-9">
+                    <button class="btn btn-block btn-success" type="submit">
+                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,92 @@
+﻿@model MercadoVentasTP.Models.IndexViewModel
+
+<div class="m-3 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="shadow container-fluid py-1">
+                <div class="mt-4">
+                    <h3 class="text-left ml-5">Mis publicaciones sin stock</h3>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @{
+                            if (Model.PublicacionesActivas.Count > 0)
+                            {
+                                <div class="card-columns">
+                                    @foreach (var publicacion in Model.PublicacionesActivas)
+                                    {
+                                        <div class="card productoHover">
+                                            <img src="https://www.blogdelfotografo.com/wp-content/uploads/2012/03/Globo.jpg" class="card-img-top rounded custom-image rounded-bottom-0">
+                                            <div class="card-body">
+                                                <h5 class="card-title font-weight-bold">@publicacion.Titulo</h5>
+                                                <p><text class="font-weight-bold text-dark">@Html.DisplayNameFor(a => publicacion.Stock)</text></p>
+                                                <p><text> @publicacion.Stock</text></p>
+                                                <p class="card-text">
+                                                    <text class="font-weight-bold text-dark">Precio actual</text>
+                                                </p>
+                                                @{
+                                                    switch (Model.ConfPrecioActual)
+                                                    {
+                                                        case "Precio base":
+                                                            <p><text>$ @publicacion.Precio</text></p>
+                                                            break;
+                                                        case "Precio mínimo":
+                                                            <p><text>$ @publicacion.PrecioMin</text></p>
+                                                            break;
+                                                        case "Precio máximo":
+                                                            <p><text>$ @publicacion.PrecioMax</text></p>
+                                                            break;
+                                                    }
+                                                }
+                                            </div>
+                                            <a href="@Url.Action("Details", "Publicacion", new { Id = publicacion.Id })" class="btn btn-success btn-block">
+                                                <span class="glyphicon glyphicon-eye-open glyphicon-lg"></span>
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                if (ViewBag.TituloBusqueda != null)
+                                {
+                                    <div id="publicacionBusqueda" class="alert alert-dismissible alert-info">
+                                        <text>@ViewBag.TituloBusqueda</text><p class="font-weight-bold font-italic resultadoBusqueda d-inline">@ViewBag.FiltroBusqueda</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="row alert alert-success text-center m-4"
+                                         role="alert">
+                                        <strong>No existen publicaciones sin stock</strong>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                @if (Model.PublicacionesActivas.Count > 0)
+                {
+                    <div class="my-3 align-center">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <nav aria-label="page navigation">
+                                    @{Html.RenderPartial("~/Views/Shared/_Paginador.cshtml", Model);}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row mx-2 mb-3">
+    <div class="col-3">
+        <a href="@Url.Action("Index", "Publicacion")" class="btn btn-block btn-primary">
+            <span class="glyphicon glyphicon-chevron-left glyphicon-lg"></span>
+        </a>
+    </div>
+</div>

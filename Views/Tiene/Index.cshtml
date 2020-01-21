@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MercadoVentasTP.Models.Tiene>
+
+
+@using MercadoVentasTP.Models
+
+@{
+
+    ViewBag.Title = "Publicaciones de una compra | MercadoVentas";
+    ViewBag.Titulo = "Publicaciones!";
+    ViewBag.Subtitulo = "Desde acá vas a poder calificar cada publicacion de una compra.";
+    ViewBag.Informacion = "Con solo dos clicks podés editar tus preferencias!";
+}
+
+
+<div class="jumbotron mb-5">
+    <h1 class="display-3 text-right">Calificación</h1>
+    <p class="lead text-right">
+        Desde acá vas a poder visualizar tus compras realizadas y no calificadas
+        <hr class="my-4">
+    <p class="text-right">Podés dejar tu opinión en pocos clicks!</p>
+</div>
+<div class="container">
+    <div class="card border-secondary mt-3 mb-5 shadow">
+        <div class="mt-4">
+            <h4 class="text-center mt-3">Publicaciones <!--de la compra--> @*  #@Html.DisplayFor(model => model.First().IdCompra) *@ sin calificar </h4>
+        </div>
+        <div id="myTabContent" class="tab-content mt-4">
+            <div class="tab-pane fade active show">
+                @if (!Model.Any())
+                {
+                    <table class="mr-2 table table-hover table-bordered">
+                        <thead class="thead-dark mr-3">
+                            <tr>
+                                <th scope="col" class="text-center">Publicación</th>
+                                <th scope="col" class="text-center">Cantidad</th>
+                                @*<th scope="col" class="text-center">Estado</th>*@
+                                <th scope="col" class="text-center">Monto</th>
+                                <th scope="col" class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="mb-5 text-center">Ya calificaste todas las publicaciones de ésta compra</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <table class="mr-2 table table-hover table-bordered">
+                        <thead class="thead-dark mr-3">
+                            <tr>
+                                <th scope="col" class="text-center">Publicación</th>
+                                <th scope="col" class="text-center col-1">Cantidad</th>
+                                @*<th scope="col" class="text-center">Estado</th>*@
+                                <th scope="col" class="text-center col-2">Monto</th>
+                                <th scope="col" class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var model in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => model.NombrePublicacion)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => model.Cantidad)</td>
+                                    @*  SE MUESTRAN TODOS LOS PRODUCTOS DE ESA COMPRA
+                                        <td>@Html.DisplayFor(modelItem => model.publicacion.Titulo)</td>*@
+                                    @*<td class="text-center">@Html.DisplayFor(modelItem => model.Estado)</td>*@
+                                    <td class="text-center">$ @Html.DisplayFor(modelItem => model.Monto)</td>
+
+                                    <td class="text-center">
+                                        @Html.ActionLink("Calificar", "Create", "Calificacion", new { idPublicacion = model.IdPublicacion, idCompra = model.IdCompra }, new { @class = "btn btn-success btn-block" })
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                }
+
+                <!-- PAGINADOR DE LA TABLA-->
+            </div>
+            <div class="container text-center">
+                <button type="button" class="btn btn-success mb-3 text-center  " onclick="location.href='@Url.Action("Index", "Calificacion")'">
+                    Volver a mis calificaciones
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+}

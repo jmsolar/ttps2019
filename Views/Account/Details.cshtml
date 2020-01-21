@@ -1,0 +1,61 @@
+﻿@model MercadoVentasTP.Models.PersonalInfoViewModel
+@{
+    ViewBag.Title = "Ver mi información personal";
+}
+
+<div class="jumbotron">
+    <h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+    <p class="lead text-right">@ViewBag.Subtitulo</p>
+    <hr class="my-4">
+    <p class="text-right">@ViewBag.Parrafo</p>
+</div>
+
+<div class="container-fluid mb-4">
+    <div class="row">
+        <div class="col">
+            <fieldset>
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label", @for = "nombre" })
+                <input class="form-control" id="nombre" type="text" value="@Html.DisplayFor(model => model.Name)" disabled>
+            </fieldset>
+        </div>
+        <div class="col">
+            <fieldset>
+                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label", @for = "apellido" })
+                <input class="form-control" id="apellido" type="text" value="@Html.DisplayFor(model => model.LastName)" disabled>
+            </fieldset>
+        </div>
+        <div class="col">
+            <fieldset>
+                @Html.LabelFor(model => model.Birthday, htmlAttributes: new { @class = "control-label", @for = "fechaNacimiento" })
+                <input class="form-control" id="fechaNacimiento" type="date" value="@Html.DisplayFor(model => model.Birthday, "{0:dd'-'MM'-'yyyy}")" disabled>
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <fieldset>
+                @Html.LabelFor(model => model.CoordX, htmlAttributes: new { @class = "control-label mt-3", @for = "latitud" })
+                <input class="form-control" id="latitud" type="number" value="@Html.DisplayFor(model => model.CoordX)" disabled>
+            </fieldset>
+        </div>
+        <div class="col">
+            <fieldset>
+                @Html.LabelFor(model => model.CoordY, htmlAttributes: new { @class = "control-label mt-3", @for = "longitud" })
+                <input class="form-control" id="longitud" type="number" value="@Html.DisplayFor(model => model.CoordY)" disabled>
+            </fieldset>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-3">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-block btn-primary">
+                <span class="glyphicon glyphicon-chevron-left glyphicon-lg"></span>
+            </a>
+        </div>
+        <div class="col-9">
+            <a href="@Url.Action("Edit", "Account")" class="btn btn-block btn-warning">
+                <span class="glyphicon glyphicon-pencil glyphicon-lg"></span>
+            </a>
+        </div>
+    </div>
+</div>

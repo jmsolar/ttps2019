@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Mi reporte";
+    var claves = TempData["Claves"] as List<string>;
+    var valores = TempData["Valores"] as List<string>;
+}
+
+<div class="jumbotron">
+    <h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+    <p class="lead text-right">@ViewBag.Subtitulo</p>
+    <hr class="my-4">
+    <p class="text-right">@ViewBag.Parrafo</p>
+</div>
+
+<div class="mx-3 mb-2">
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-5-lg mt-3">
+            <div class="shadow">
+                <div class="mb-3 text-center">
+                    <div class="card-body ">
+                        <h4 class="card-title-center text-center mt-3">VENTAS POR PUBLICACION</h4>
+                        <div class="form-group mt-2">
+                            <p class="card-text mt-4">
+                                El eje horizontal indica las publicaciones que vendiste y, sobre el eje vertical podés visualizar la cantidad de ventas de cada una de ellas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-7-lg mt-3">
+            <div class="shadow">
+                <canvas id="ventasPorPublicacion"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row m-3 mt-4">
+    <div class="col-3">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-block btn-primary">
+            <span class="glyphicon glyphicon-chevron-left glyphicon-lg"></span>
+        </a>
+    </div>
+</div>
+
+@section Custom {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var claves = [];
+            var valores = [];
+            $.getJSON("@Url.Action("ObtenerClaves", "Publicacion")", {}, function (data) {
+                $.each(data, function () {
+                    claves.push(this);
+                });
+            });
+
+            $.getJSON("@Url.Action("ObtenerValores", "Publicacion")", {}, function (data) {
+                $.each(data, function () {
+                    valores.push(this);
+                });
+                var ctx = document.getElementById("ventasPorPublicacion").getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: claves,
+                          label: 'Ventas por publicacion',
+                        datasets: [{
+                            label: 'Ventas realizadas',
+                            data: valores,
+
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+}

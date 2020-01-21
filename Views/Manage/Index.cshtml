@@ -1,0 +1,133 @@
+﻿@model MercadoVentasTP.Models.IndexViewModel
+@{
+    ViewBag.Title = "Configuraciones";
+}
+
+<div class="jumbotron">
+    <h1 class="display-3 text-right">@ViewBag.Titulo</h1>
+    <p class="lead text-right">@ViewBag.Subtitulo</p>
+    <hr class="my-4">
+    <p class="text-right">@ViewBag.Parrafo</p>
+</div>
+<div class="mx-3">
+    <div class="row">
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="shadow container-fluid pb-2 pt-2">
+                <div class="mb-3 text-center">
+                    @using (Html.BeginForm("ActualizarConfiguracionDePrecio", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card-body ">
+                            <h4 class="card-title-center text-center mt-3">CONFIGURACION DE PRECIOS</h4>
+                            <div class="form-group mt-2">
+                                <p class="card-text mt-4">
+                                    Desde acá podes cambiar todos tus precios actuales
+                                    a
+                                    valor base, mínimo ó máximo. Recordá que esto impacta en todas las
+                                    publicaciones.
+                                </p>
+                                <div class="input-group mt-4">
+                                    <div class="input-group">
+                                        <select class="custom-select mt-2" id="confPrecio" name="confPrecio">
+                                            <option value="">Elegí un precio..</option>
+                                            <option value="Precio base">Precio base</option>
+                                            <option value="Precio mínimo">Precio mínimo</option>
+                                            <option value="Precio máximo">Precio máximo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block" type="submit">
+                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                            </button>
+                        </div>
+                        <div class="card-footer">
+                            <p>CONFIGURACION ACTUAL DE PRECIOS:</p>
+                            <h5 class="text-info">@ViewBag.ConfPrecioActual.ToUpper()</h5>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="shadow container-fluid pb-2 pt-2">
+                <div class="mb-3 text-center">
+                    @using (Html.BeginForm("IncrementarPorcentajeDePrecios", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card-body ">
+                            <h4 class="card-title-center text-center mt-3">INCREMENTO DE PRECIOS</h4>
+                            <div class="form-group mt-2">
+                                <p class="card-text mt-4">
+                                    Desde acá podes incrementar el precio de las
+                                    publicaciones. Recordá que el aumento impacta en todas las publicaciones
+                                    y
+                                    en cada uno de sus precios (base, mínimo y máximo).
+                                </p>
+                                <div class="input-group mb-3">
+                                    <input id="incrementoPrecio" class="form-control" name="incrementoPrecio" type="number" placeholder="Porcentaje de incremento">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"
+                                              id="inputGroup-sizing-default">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block" type="submit">
+                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                            </button>
+                        </div>
+                        if (TempData["Incremento"] != null)
+                        {
+                            <div class="card-footer">
+                                <div class="alert alert-dismissible alert-success m-0">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>@TempData["Incremento"]</strong>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="shadow container-fluid pb-2 pt-2">
+                <div class="mb-3 text-center">
+                    @using (Html.BeginForm("DecrementarPorcentajeDePrecios", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card-body ">
+                            <h4 class="card-title-center text-center mt-3">DECREMENTO DE PRECIOS</h4>
+                            <div class="form-group mt-2">
+                                <p class="card-text mt-4">
+                                    Desde acá podes decrementar el precio de las
+                                    publicaciones. Recordá que el aumento impacta en todas las publicaciones
+                                    y
+                                    en cada uno de sus precios (base, mínimo y máximo).
+                                </p>
+                                <div class="input-group mb-3">
+                                    <input id="decrementoPrecio" class="form-control" name="decrementoPrecio" type="number" placeholder="Porcentaje de decremento">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"
+                                              id="inputGroup-sizing-default">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block" type="submit">
+                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                            </button>
+                        </div>
+                        if (TempData["Decremento"] != null)
+                        {
+                            <div class="card-footer">
+                                <div class="alert alert-dismissible alert-success m-0">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>@TempData["Decremento"]</strong>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
